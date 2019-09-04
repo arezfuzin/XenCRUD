@@ -26,7 +26,7 @@ module.exports = {
   getDataByOrganization(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
-    Model.find({organization})
+    Model.find({organization, isDeleted: false})
       .then((data) => {
         if (data.length > 0) {
           res.status(200).json({
@@ -44,6 +44,23 @@ module.exports = {
         console.log(chalk.red('[ERROR]: '), err.message);
         res.status(400).json({
           message: 'Can\'t find data',
+        });
+      });
+  },
+  deleteData(req, res) {
+    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    const organization = req.params.orgName
+    Model.update({organization, isDeleted: false}, {$set: {isDeleted: true}}, { multi: true })
+      .then((data) => {
+        res.status(200).json({
+          message: 'Data deleted !',
+          data,
+        });
+      })
+      .catch((err) => {
+        console.log(chalk.red('[ERROR]: '), err.message);
+        res.status(400).json({
+          message: 'Can\'t delete data',
         });
       });
   },

@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const {
   postData,
-  getDataByOrganization
+  getDataByOrganization,
+  deleteData
 } = require('../controller')
 
 router.get('/', (req, res) => {
@@ -12,5 +13,6 @@ router.get('/', (req, res) => {
 
 router.post('/orgs/:orgName/comments', postData);
 router.get('/orgs/:orgName/comments', getDataByOrganization);
+router.delete('/orgs/:orgName/comments', deleteData);
 
 module.exports = router;

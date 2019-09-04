@@ -21,7 +21,7 @@ db.on('open', () => {
 });
 db.on('error', () => {
   console.log(chalk.blue('[API]: '), chalk.red('Database not Connected !!'));
-})
+});
 
 app.use(cors());
 app.use(express.json());

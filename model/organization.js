@@ -20,6 +20,6 @@ const schema = new mongoose.Schema({
   }
 });
 
-const Model = mongoose.model('xencrud', schema);
+const Model = mongoose.model('xenorganization', schema);
 
 module.exports = Model;

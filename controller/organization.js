@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const Model = require('../model');
+const Organization = require('../model/organization');
 
 module.exports = {
   postData(req, res) {
@@ -8,7 +8,7 @@ module.exports = {
       organization: req.params.orgName,
       comment: req.body.comment
     }
-    const newModel = new Model(data);
+    const newModel = new Organization(data);
     newModel.save()
       .then((data) => {
         res.status(200).json({
@@ -26,7 +26,7 @@ module.exports = {
   getDataByOrganization(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
-    Model.find({organization, isDeleted: false})
+    Organization.find({organization, isDeleted: false})
       .then((data) => {
         if (data.length > 0) {
           res.status(200).json({
@@ -50,7 +50,7 @@ module.exports = {
   deleteData(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
-    Model.update({organization, isDeleted: false}, {$set: {isDeleted: true}}, { multi: true })
+    Organization.update({organization, isDeleted: false}, {$set: {isDeleted: true}}, { multi: true })
       .then((data) => {
         res.status(200).json({
           message: 'Data deleted !',

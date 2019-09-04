@@ -3,7 +3,12 @@ const {
   postData,
   getDataByOrganization,
   deleteData
-} = require('../controller')
+} = require('../controller/organization')
+
+const {
+  signUp,
+  signIn,
+} = require('../controller/member');
 
 router.get('/', (req, res) => {
   res.status(200).json({
@@ -11,8 +16,13 @@ router.get('/', (req, res) => {
   });
 });
 
+// Organization
 router.post('/orgs/:orgName/comments', postData);
 router.get('/orgs/:orgName/comments', getDataByOrganization);
 router.delete('/orgs/:orgName/comments', deleteData);
+
+// Member
+router.post('/sign-up', signUp);
+router.post('/sign-in', signIn);
 
 module.exports = router;

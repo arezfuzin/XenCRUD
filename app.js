@@ -14,19 +14,19 @@ mongoose.set('useNewUrlParser', true);
 
 mongoose.connect(`${process.env.MONGO_DB_CONNECTION}`);
 const db = mongoose.connection;
+
 db.on('open', () => {
-  console.log(chalk.blue('[API]: '), chalk.green('Connected to Database !!'));
+  console.log(chalk.blue('[API]: '), chalk.green('Database connected !'));
+  app.listen(port, console.log(chalk.blue('[API]: '), 'Connected to Port:', chalk.green(process.env.PORT)));
 });
 db.on('error', () => {
   console.log(chalk.blue('[API]: '), chalk.red('Database not Connected !!'));
-});
+})
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', router);
-
-app.listen(port, console.log(chalk.blue('[API]: '), chalk.green('Connected to Port !!')));
 
 module.exports = app;

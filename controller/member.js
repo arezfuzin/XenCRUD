@@ -20,14 +20,14 @@ const generateRandomValue = (low, high) => {
 module.exports = {
   signUp(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
-
-    let isAlreadyRes = false
+    const { email, password } = req.body
     
     const followers = generateRandomValue(0, 1000000)
     const following = generateRandomValue(0, 1000000)
 
-    const isEmailOK = validateEmail(req.body.email)
-    const isPasswordOK = validatePassword(req.body.password)
+    let isAlreadyRes = false
+    const isEmailOK = validateEmail(email)
+    const isPasswordOK = validatePassword(password)
 
     if (!isEmailOK) {
       isAlreadyRes = true
@@ -77,7 +77,12 @@ module.exports = {
   signIn(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body;
-    Member.findOne({ email })
+    Member.findOneAndUpdate(
+      { email },
+      {
+        lastActive: new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}),
+        isLogin: true,
+      })
       .then((data) => {
         const isMatch = bcryptjs.compareSync(password, data.password);
         if (isMatch) {
@@ -89,7 +94,7 @@ module.exports = {
           };
           const token = jwt.sign(responseData, process.env.USER_SECRET);
           res.status(200).json({
-            message: 'Loging in !',
+            message: 'Log in !',
             data: responseData,
             token,
           });
@@ -102,8 +107,55 @@ module.exports = {
       .catch((err) => {
         console.log(chalk.red('[ERROR]: '), err.message);
         res.status(400).json({
-          message: 'Email wrong !',
+          message: 'Email invalid !',
         });
       });
   },
+
+  signOut(req, res) {
+    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    const { email } = req.body;
+    Member.findOneAndUpdate(
+      { email },
+      {
+        isLogin: false,
+      })
+      .then(() => {
+        res.status(200).json({
+          message: 'You already log out !',
+        })
+      })
+      .catch((err) => {
+        console.log(chalk.red('[ERROR]: '), err.message);
+        res.status(400).json({
+          message: 'Filed to log out !',
+        });
+      });
+  },
+
+  getAllMembers(req, res) {
+    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    const organization = req.params.orgName
+    Member.find({organization})
+      .sort([['followers', 'descending']])
+      .then((data) => {
+        if (data.length > 0) {
+          res.status(200).json({
+            message: 'Data found !',
+            data,
+          });
+        } else {
+          res.status(200).json({
+            message: 'There is no data !',
+            data,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red('[ERROR]: '), err.message);
+        res.status(400).json({
+          message: 'Can\'t find data',
+        });
+      });
+  }
 };

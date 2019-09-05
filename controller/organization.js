@@ -50,7 +50,7 @@ module.exports = {
   deleteData(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
-    Organization.update({organization, isDeleted: false}, {$set: {isDeleted: true}}, { multi: true })
+    Organization.update({organization, isDeleted: true}, {$set: {isDeleted: false}}, { multi: true })
       .then((data) => {
         res.status(200).json({
           message: 'Data deleted !',

@@ -19,7 +19,7 @@ const generateRandomValue = (low, high) => {
 
 module.exports = {
   signUp(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[signUp]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body
     
     const followers = generateRandomValue(0, 1000000)
@@ -57,7 +57,7 @@ module.exports = {
           userName: data.userName,
           email: data.email,
         };
-        const token = jwt.sign(userData, process.env.USER_SECRET);
+        const token = jwt.sign(userData, process.env.USER_SECRET, { expiresIn: '1h' });
         res.status(200).json({
           message: 'Account Created !',
           userData,
@@ -65,7 +65,7 @@ module.exports = {
         });
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR signUp]: '), err.message);
         if (!isAlreadyRes) {
           res.status(400).json({
             message: 'Can\'t create account, possibility your username already taken or your email already used.',
@@ -75,7 +75,7 @@ module.exports = {
   },
 
   signIn(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[signIn]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body;
     Member.findOneAndUpdate(
       { email },
@@ -88,11 +88,11 @@ module.exports = {
         if (isMatch) {
           const responseData = {
             id: data.id,
-            userName: data.userName,
+            username: data.username,
             email: data.email,
             role: data.role,
           };
-          const token = jwt.sign(responseData, process.env.USER_SECRET);
+          const token = jwt.sign(responseData, process.env.USER_SECRET, { expiresIn: '1h' });
           res.status(200).json({
             message: 'Log in !',
             data: responseData,
@@ -105,7 +105,7 @@ module.exports = {
         }
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR signIn]: '), err.message);
         res.status(400).json({
           message: 'Email invalid !',
         });
@@ -113,7 +113,7 @@ module.exports = {
   },
 
   signOut(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[signOut]:'), chalk.cyanBright(req.path));
     const { email } = req.body;
     Member.findOneAndUpdate(
       { email },
@@ -126,7 +126,7 @@ module.exports = {
         })
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR signOut]: '), err.message);
         res.status(400).json({
           message: 'Filed to log out !',
         });
@@ -134,7 +134,7 @@ module.exports = {
   },
 
   getAllMembers(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[getAllMembers]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
     Member.find({organization})
       .sort([['followers', 'descending']])
@@ -152,7 +152,7 @@ module.exports = {
         }
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR getAllMembers]: '), err.message);
         res.status(400).json({
           message: 'Can\'t find data',
         });

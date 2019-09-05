@@ -3,7 +3,7 @@ const Organization = require('../model/organization');
 
 module.exports = {
   postData(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[postData]:'), chalk.cyanBright(req.path));
     const data = {
       organization: req.params.orgName,
       comment: req.body.comment
@@ -17,14 +17,14 @@ module.exports = {
         });
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR postData]: '), err.message);
         res.status(400).json({
           message: 'Can\'t save data',
         });
       });
   },
   getDataByOrganization(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[getDataByOrganization]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
     Organization.find({organization, isDeleted: false})
       .then((data) => {
@@ -41,16 +41,16 @@ module.exports = {
         }
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR getDataByOrganization]: '), err.message);
         res.status(400).json({
           message: 'Can\'t find data',
         });
       });
   },
   deleteData(req, res) {
-    console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
+    console.log(chalk.yellow('[deleteData]:'), chalk.cyanBright(req.path));
     const organization = req.params.orgName
-    Organization.update({organization, isDeleted: true}, {$set: {isDeleted: false}}, { multi: true })
+    Organization.updateMany({organization, isDeleted: false}, {$set: {isDeleted: true}}, { multi: true })
       .then((data) => {
         res.status(200).json({
           message: 'Data deleted !',
@@ -58,7 +58,7 @@ module.exports = {
         });
       })
       .catch((err) => {
-        console.log(chalk.red('[ERROR]: '), err.message);
+        console.log(chalk.red('[ERROR deleteData]: '), err.message);
         res.status(400).json({
           message: 'Can\'t delete data',
         });

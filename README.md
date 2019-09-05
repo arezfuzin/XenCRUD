@@ -24,7 +24,7 @@ Health check route:
 
 Route | Method | Description
 ----- | ---- | -----------
-http://localhost:3000/ | - | for check server connection
+/ | - | for check server connection
 
 List of organization routes:
 

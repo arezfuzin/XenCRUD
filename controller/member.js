@@ -78,22 +78,19 @@ module.exports = {
   signIn(req, res) {
     console.log(chalk.yellow('[signIn]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body;
-    Member.findOneAndUpdate(
-      { email, isLogin: false },
-      {
-        isLogin: true,
-        lastActive: new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}),
-      })
-      .then((data) => {
+    Member.findOne({ email, isLogin: false })
+      .then(async (data) => {
         const isMatch = bcryptjs.compareSync(password, data.password);
-        console.log(isMatch);
         if (isMatch) {
+          await Member.updateOne({_id: data._id}, {
+            isLogin: true,
+            lastActive: new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}),
+          })
           const responseData = {
             id: data.id,
             username: data.username,
             email: data.email,
             role: data.role,
-            isLogin: true
           };
           const token = jwt.sign(responseData, process.env.USER_SECRET, { expiresIn: '1h' });
           res.status(200).json({

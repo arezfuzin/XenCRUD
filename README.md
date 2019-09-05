@@ -41,7 +41,7 @@ Route | HTTP | Description
 /signUp | POST | sign up and create new account as member
 /signIn | POST | sign in to system
 /signOut | POST | sign out from system
-(**)/orgs/:orgName/members/ | GET | Get all member data base on organization name in the parameter
+(**)/orgs/:orgName/members | GET | Get all member data base on organization name in the parameter
 
 ### note:
 (*) you need to add token in header so you have to login first to get the access token.

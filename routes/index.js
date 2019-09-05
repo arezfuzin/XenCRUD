@@ -22,7 +22,7 @@ router.get('/orgs/:orgName/comments', getDataByOrganization);
 router.delete('/orgs/:orgName/comments', deleteData);
 
 // Member
-router.post('/sign-up', signUp);
-router.post('/sign-in', signIn);
+router.post('/signUp', signUp);
+router.post('/signIn', signIn);
 
 module.exports = router;

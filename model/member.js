@@ -16,7 +16,7 @@ const schema = new mongoose.Schema({
     type: String,
     default: 'user',
   },
-  userName: {
+  username: {
     type: String,
     trim: true,
     lowercase: true,
@@ -39,22 +39,19 @@ const schema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    required: true,
     default: 'http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon'
   },
   followers: {
     type: Number,
-    required: true,
     default: 0,
   },
   following: {
     type: Number,
-    required: true,
     default: 0,
   },
   lastActive: {
-    type: Date,
-    default: new Date()
+    type: String,
+    default: new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"})
   },
   isLogin: {
     type: Boolean,

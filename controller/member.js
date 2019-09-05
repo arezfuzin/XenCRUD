@@ -1,38 +1,83 @@
 const chalk = require('chalk');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
-const Model = require('../model/member');
+const Member = require('../model/member');
+
+const validateEmail = (email) => {
+  const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
+};
+
+const validatePassword = (password) => {
+  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/;
+  return re.test(password);
+};
+
+const generateRandomValue = (low, high) => {
+  return Math.floor(Math.random() * (high - low) + low)
+}
 
 module.exports = {
   signUp(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
-    const newModel = new Model(req.body);
+
+    let isAlreadyRes = false
+    
+    const followers = generateRandomValue(0, 1000000)
+    const following = generateRandomValue(0, 1000000)
+
+    const isEmailOK = validateEmail(req.body.email)
+    const isPasswordOK = validatePassword(req.body.password)
+
+    if (!isEmailOK) {
+      isAlreadyRes = true
+      res.status(400).json({
+        message: 'Please fill a valid email address',
+      });
+    }
+
+    if (!isPasswordOK) {
+      isAlreadyRes = true
+      res.status(400).json({
+        message: 'Your password minimum eight characters, at least one letter and one number',
+      });
+    }
+
+    const newMember = {
+      ...req.body,
+      followers,
+      following,
+    }
+
+    const newModel = new Member(newMember);
     newModel.save()
       .then((data) => {
-        const responseData = {
+        const userData = {
           id: data.id,
           userName: data.userName,
           email: data.email,
         };
-        const token = jwt.sign(responseData, process.env.USER_SECRET);
+        const token = jwt.sign(userData, process.env.USER_SECRET);
         res.status(200).json({
           message: 'Account Created !',
-          data: responseData,
+          userData,
           token,
         });
       })
       .catch((err) => {
         console.log(chalk.red('[ERROR]: '), err.message);
-        res.status(400).json({
-          message: 'Can\'t create account',
-        });
+        if (!isAlreadyRes) {
+          res.status(400).json({
+            message: 'Can\'t create account, possibility your username already taken or your email already used.',
+          });
+        }
       });
   },
 
   signIn(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body;
-    Model.findOne({ email })
+    Member.findOne({ email })
       .then((data) => {
         const isMatch = bcryptjs.compareSync(password, data.password);
         if (isMatch) {
@@ -49,7 +94,7 @@ module.exports = {
             token,
           });
         } else {
-          res.status(200).json({
+          res.status(400).json({
             message: 'Wrong password !',
           });
         }

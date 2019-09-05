@@ -7,13 +7,13 @@ USER_SECRET='1234567890!@#$%^&*()qwertyuiioplkjhgfdsaZXCVBNM<>?'
 PORT='3000'
 ```
   
-Install the dependencies and devDependencies and start the server.
+Install the dependencies and devDependencies and start the server:
 ```
 $ npm install
 $ npm start
 ```
 
-Running test scenario.
+Running test scenario:
 ```
 $ npm test
 ```

@@ -54,8 +54,9 @@ module.exports = {
       .then((data) => {
         const userData = {
           id: data.id,
-          userName: data.userName,
+          username: data.username,
           email: data.email,
+          role: data.role,
         };
         const token = jwt.sign(userData, process.env.USER_SECRET, { expiresIn: '1h' });
         res.status(200).json({
@@ -78,19 +79,21 @@ module.exports = {
     console.log(chalk.yellow('[signIn]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body;
     Member.findOneAndUpdate(
-      { email },
+      { email, isLogin: false },
       {
-        lastActive: new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}),
         isLogin: true,
+        lastActive: new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}),
       })
       .then((data) => {
         const isMatch = bcryptjs.compareSync(password, data.password);
+        console.log(isMatch);
         if (isMatch) {
           const responseData = {
             id: data.id,
             username: data.username,
             email: data.email,
             role: data.role,
+            isLogin: true
           };
           const token = jwt.sign(responseData, process.env.USER_SECRET, { expiresIn: '1h' });
           res.status(200).json({
@@ -120,7 +123,8 @@ module.exports = {
       {
         isLogin: false,
       })
-      .then(() => {
+      .then((data) => {
+        if (!data) throw new Error;
         res.status(200).json({
           message: 'You already log out !',
         })

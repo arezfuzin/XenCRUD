@@ -24,7 +24,7 @@ Health check route:
 
 Route | Method | Description
 ----- | ---- | -----------
-/ | - | for check server connection
+ / | GET | for check server connection
 
 List of organization routes:
 

@@ -13,21 +13,29 @@ $ npm install
 $ npm start
 ```
 
+Running test scenario.
+```
+$ npm test
+```
+
 ## Endpoints
 
 Health check route:
+
 Route | Method | Description
 ----- | ---- | -----------
 http://localhost:3000/ | - | for check server connection
 
 List of organization routes:
+
 Route | HTTP | Description
 ----- | ---- | -----------
 (*)/orgs/:orgName/comments | POST | post organization comment base on organization name in the parameter
 (*)/orgs/:orgName/comments | GET | get all organization comment base on organization name in the parameter
 (**)/orgs/:orgName/comments | DELETE | soft delete all organization comment base on organization name in the parameter
 
- List of member routes:
+List of member routes:
+
 Route | HTTP | Description
 ----- | ---- | -----------
 /signUp | POST | sign up and create new account as member

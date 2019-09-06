@@ -69,12 +69,12 @@ describe('Member Flow', () => {
       .send(user)
       .end((err, res) => {
         if (err) throw err;
+        userId = res.body.userData.id
+        userToken = res.body.token
         expect(res).to.have.status(200);
         expect(res.body.message).to.equal('Account Created !');
         expect(res.body.userData.role).to.equal('user');
         expect(res.body.userData).to.be.an('object');
-        userToken = res.body.token
-        userId = res.body.userData.id
         done();
       });
   });
@@ -99,12 +99,12 @@ describe('Member Flow', () => {
       .send(admin)
       .end((err, res) => {
         if (err) throw err;
+        adminToken = res.body.token
+        adminId = res.body.userData.id
         expect(res).to.have.status(200);
         expect(res.body.message).to.equal('Account Created !');
         expect(res.body.userData.role).to.equal('admin');
         expect(res.body.userData).to.be.an('object');
-        adminToken = res.body.token
-        adminId = res.body.userData.id
         done();
       });
   });
@@ -185,11 +185,11 @@ describe('Member Flow', () => {
       .send({ email: userEmail, password: userPassword })
       .end((err, res) => {
         if (err) throw err;
+        userToken = res.body.token
         expect(res).to.have.status(200);
         expect(res.body.message).to.equal('Log in !');
         expect(res.body.data.role).to.equal('user');
         expect(res.body.data).to.be.an('object');
-        userToken = res.body.token
         done();
       });
   });
@@ -201,11 +201,11 @@ describe('Member Flow', () => {
       .send({ email: adminEmail, password: adminPassword })
       .end((err, res) => {
         if (err) throw err;
+        adminToken = res.body.token
         expect(res).to.have.status(200);
         expect(res.body.message).to.equal('Log in !');
         expect(res.body.data.role).to.equal('admin');
         expect(res.body.data).to.be.an('object');
-        adminToken = res.body.token
         done();
       });
   });
@@ -275,11 +275,11 @@ describe('Organization flow', () => {
       .set('token', userToken)
       .send(commentMessage)
       .end((err, res) => {
+        commentId = res.body.data._id
         if (err) throw err;
         expect(res).to.have.status(200);
         expect(res.body.message).to.equal('Data Saved !');
         expect(res.body.data).to.be.an('object');
-        commentId = res.body.data._id
         done();
       });
   });

@@ -58,8 +58,8 @@ describe('Health server check', () => {
 
 describe('Member Flow', () => {
   beforeEach(function(done) {
-    this.timeout(3000);
-    setTimeout(done, 2500);
+    this.timeout(5000);
+    setTimeout(done, 4500);
   });
 
   it('Should sign up new member data with role as an user', (done) => {
@@ -250,8 +250,8 @@ describe('Member Flow', () => {
 
 describe('Organization flow', () => {
   beforeEach(function(done) {
-    this.timeout(3000);
-    setTimeout(done, 2500);
+    this.timeout(5000);
+    setTimeout(done, 4500);
   });
 
   after( async function() {
@@ -390,13 +390,15 @@ describe('Organization flow', () => {
 
 describe('User sign out', () => {
   beforeEach(function(done) {
-    this.timeout(3000);
-    setTimeout(done, 2500);
+    this.timeout(5000);
+    setTimeout(done, 4500);
   });
 
   after( async function() {
     await Member.findByIdAndRemove(adminId)
     await Member.findByIdAndRemove(userId)
+    adminToken = ''
+    userToken = ''
   });
 
   it('User account should log out from system', (done) => {

@@ -1,4 +1,5 @@
 require('dotenv').config();
+const serverless = require('serverless-http');
 const chalk = require('chalk');
 const express = require('express');
 const cors = require('cors');
@@ -24,4 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', router);
 app.listen(port, console.log(chalk.blue('[API]: '), 'Connected to Port:', chalk.green(process.env.PORT)));
 
-module.exports = app;
+module.exports = {
+  handler: serverless(app),
+  app,
+};

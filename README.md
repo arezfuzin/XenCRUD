@@ -68,3 +68,10 @@ example sign up as admin
 ```
 
 API result and detail: `https://documenter.getpostman.com/view/6609718/SVfUt72x?version=latest#38f86ac8-8117-4684-aac5-dda88720b3a7`
+
+Deployed:
+```
+Lambda functions
+
+https://vb09ntin71.execute-api.us-east-1.amazonaws.com/dev/
+```

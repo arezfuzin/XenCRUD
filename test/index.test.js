@@ -1,9 +1,11 @@
 /* eslint-disable */
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../app');
+const root = require('../app');
 const Member = require('../model/member');
 const Organization = require('../model/organization');
+
+const app = root.app
 
 const expect = chai.expect;
 chai.use(chaiHttp);

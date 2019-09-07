@@ -1,0 +1,53 @@
+service: xencrud
+provider:
+  name: aws
+  runtime: nodejs10.x
+functions:
+  app:
+    handler: app.handler
+    events:
+      - http:
+          path: /
+          method: get
+  signUp:
+    handler: app.handler
+    events:
+      - http:
+          path: /signUp
+          method: post
+  signIn:
+    handler: app.handler
+    events:
+      - http:
+          path: /signIn
+          method: post
+  signOut:
+    handler: app.handler
+    events:
+      - http:
+          path: /signOut
+          method: post
+  getAllMembers:
+    handler: app.handler
+    events:
+      - http:
+          path: /orgs/{orgName}/members/
+          method: get
+  postData:
+    handler: app.handler
+    events:
+      - http:
+          path: /orgs/{orgName}/comments
+          method: post
+  getDataByOrganization:
+    handler: app.handler
+    events:
+      - http:
+          path: /orgs/{orgName}/comments
+          method: get
+  deleteData:
+    handler: app.handler
+    events:
+      - http:
+          path: /orgs/{orgName}/comments
+          method: delete

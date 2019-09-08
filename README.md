@@ -46,6 +46,7 @@ Route | HTTP | Description
 ### note:
 (*) you need to add token in header so you have to login first to get the access token.
 - example: `"token": <token string>`
+- token will expired in 1 hour
 
 (**) you need to add token in header so you have to login first to get the access token and you need to sign in or sign up you member account as admin (by default you will sign up as user)
 ```
